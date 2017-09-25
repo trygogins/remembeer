@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Remembeer::An app for group expenses tracking</title>
+  </head>
+  <body>
+    <ul>
+      <li><a href="/projects">Projects</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+
+    <% if (success) { %>
+      <div>congrats with adding a project!</div>
+    <% } %>
+
+    <div style="background-color: #00aa00">
+      <ul>
+        <% for (i=0;i<projects.length;i++) { %>
+          <li><a href="/projects/<%= projects[i]._id %>"><%= projects[i].title %></a></li>
+        <% }; %>
+      </ul>
+    </div>
+
+    <div style="background-color: #aa0000">
+      <form id="new-project-form" method="POST" action="/projects">
+        <label for="title">Project Title:</label>
+        <input type="text" name="title"/>
+        <input type="submit" value="submit"/>
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title><%= project.title %> – Project Page</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      function setValue(value) {
+        document.getElementById("form-owner-id").value = value;
+      }
+    </script>
+  </head>
+  <body>
+    <ul>
+      <li><a href="/projects">Projects</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+
+    <h1><%= project.title %></h1>
+    <div style="background-color: #00aa00">
+      <h3>Your trip members:</h3>
+      <ul>
+        <!-- for each member we create an ability to add expenses -->
+        <% for (i=0;i<project.members.length;i++) { %>
+          <li><%= project.members[i].name %></li>
+          <input type="button" value="+" onclick="setValue('<%= project.members[i]._id %>');">
+        <% }; %>
+      </ul>
+      <h4>Add a member:</h4>
+      <form id="new-member-form" method="POST" action="/projects/<%= project._id %>/newmember">
+        <label for="name">Member Name:</label>
+        <input type="text" name="name"/>
+        <input type="submit" value="submit"/>
+      </form>
+    </div>
+
+    <div style="background-color: #aa0000">
+      <h3>Your trip expenses:</h3>
+      <ul>
+        <% for (i=0;i<project.expenses.length;i++) { %>
+          <li><%= project.expenses[i].amount; %></li>
+        <% }; %>
+      </ul>
+      <form id="new-expense-form" method="POST" action="/projects/<%= project._id %>/newexpense">
+        <input id="form-owner-id" type="hidden" name="owner"/>
+        <label for="amount">Amount:</label>
+        <input type="number" name="amount"/>
+        <% for (i=0;i<project.members.length;i++) { %>
+          <input type="checkbox" name="took_part" value="<%= project.members[i]._id %>">
+          <label for="took_part"><%= project.members[i].name %></label>
+        <% }; %>
+        <input type="submit" value="submit"/>
+      </form>
+    </div>
+
+    <div style="background-color: #aaaa00">
+      <h3>Summary:</h3>
+      <div id="summary">
+      </div>
+      <script type="text/javascript">
+        $(document).ready(function() {
+          $.ajax({
+            url: "/projects/<%= project._id %>/summary"
+          }).done(function(data) {
+            $("#summary").html(data);
+          });
+        });
+      </script>
+    </div>
+  </body>
+</html>

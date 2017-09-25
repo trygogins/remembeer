@@ -1,0 +1,23 @@
+{
+  "name": "remembeer",
+  "version": "1.0.0",
+  "description": "keep track of your depts",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "dept",
+    "money",
+    "tracker"
+  ],
+  "author": "ovsyanng",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "ejs": "^2.5.7",
+    "express": "^4.15.4",
+    "ip": "^1.1.5",
+    "mongoose": "^4.11.12"
+  }
+}
