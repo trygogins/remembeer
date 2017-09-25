@@ -1,35 +1,51 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Remembeer::An app for group expenses tracking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Remembeer – An app for group expenses tracking</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript">
+      const hideMessage = function() {
+        $("#message").hide();
+      }
+    </script>
   </head>
   <body>
-    <ul>
-      <li><a href="/projects">Projects</a></li>
-      <li><a href="/about">About</a></li>
-      <li><a href="/contact">Contact</a></li>
-    </ul>
+    <% include partial/nav.ejs %>
 
-    <% if (success) { %>
-      <div>congrats with adding a project!</div>
-    <% } %>
+    <div class="container">
 
-    <div style="background-color: #00aa00">
-      <ul>
-        <% for (i=0;i<projects.length;i++) { %>
-          <li><a href="/projects/<%= projects[i]._id %>"><%= projects[i].title %></a></li>
-        <% }; %>
-      </ul>
-    </div>
+      <% if (success) { %>
+        <div class="notification is-success" id="message">
+          <button class="delete" onclick="hideMessage()"></button>
+          Congrats on adding new project!
+        </div>
+      <% } %>
 
-    <div style="background-color: #aa0000">
-      <form id="new-project-form" method="POST" action="/projects">
-        <label for="title">Project Title:</label>
-        <input type="text" name="title"/>
-        <input type="submit" value="submit"/>
-      </form>
+        <section class="hero">
+          <% for (i=0;i<projects.length;i++) { %>
+            <a href="/projects/<%= projects[i]._id %>">
+              <div class="hero-body is-light">
+                <div class="container" style=":hover {background: $blue}">
+                  <h2 class="title"><%= projects[i].title %></h2>
+                  <h3 class="subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</h3>
+                </div>
+              </div>
+            </a>
+          <% }; %>
+        </div>
+
+        <div style="background-color: #aa0000">
+          <form id="new-project-form" method="POST" action="/projects">
+            <label for="title">Project Title:</label>
+            <input type="text" name="title"/>
+            <input type="submit" value="submit"/>
+          </form>
+        </div>
+
     </div>
   </body>
 </html>
