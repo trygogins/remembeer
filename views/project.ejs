@@ -12,28 +12,62 @@
       function setValue(value) {
         document.getElementById("form-owner-id").value = value;
       }
+
+      function toggleForm(member_id) {
+        var all_forms = document.getElementsByName("expense-form");
+        for (i=0;i<all_forms.length;i++) {
+          if (all_forms[i].id != member_id) {
+            all_forms[i].style.visibility = "hidden";
+          }
+        }
+
+        document.getElementById(member_id).style.visibility = "visible";
+      }
     </script>
   </head>
   <body>
     <% include partial/nav.ejs %>
 
-    <h1><%= project.title %></h1>
-    <div style="background-color: #00aa00">
-      <h3>Your trip members:</h3>
-      <ul>
-        <!-- for each member we create an ability to add expenses -->
-        <% for (i=0;i<project.members.length;i++) { %>
-          <li><%= project.members[i].name %></li>
-          <input type="button" value="+" onclick="setValue('<%= project.members[i]._id %>');">
-        <% }; %>
-      </ul>
-      <h4>Add a member:</h4>
+    <div class="hero-body has-text-centered">
       <form id="new-member-form" method="POST" action="/projects/<%= project._id %>/newmember">
-        <label for="name">Member Name:</label>
-        <input type="text" name="name"/>
-        <input type="submit" value="submit"/>
+        <div class="field has-addons">
+          <div class="control">
+            <input class="input" type="text" name="name" placeholder="Member name" required="required"/>
+          </div>
+          <div class="control">
+            <button class="button is-primary centered">
+              <span class="icon">
+                <i class="fa fa-plus"></i>
+              </span>
+            </button>
+          </div>
+        </div>
       </form>
     </div>
+
+    <table class="table is-bordered is-fullwidth">
+      <tbody>
+        <% for (i=0;i<project.members.length;i++) { %>
+          <tr><td>
+            <a onclick="toggleForm('<%= project.members[i]._id %>')">
+              <h2 class="subtitle"><%= project.members[i].name %></h2>
+              <div class="container" name="expense-form" id="<%= project.members[i]._id %>" style="visibility: hidden">
+                <form method="POST" action="/projects/<%= project._id %>/newexpense">
+                  <input type="hidden" name="owner" value="<%= project.members[i]._id %>"/>
+                  <label for="amount">Amount:</label>
+                  <input type="number" name="amount"/>
+                  <% for (j=0;j<project.members.length;j++) { %>
+                    <input type="checkbox" name="took_part" value="<%= project.members[j]._id %>">
+                    <label for="took_part"><%= project.members[j].name %></label>
+                  <% }; %>
+                  <input type="submit" value="submit"/>
+                </form>
+              </div>
+            </a>
+          </td></tr>
+        <% }; %>
+      </tbody>
+    </table>
 
     <div style="background-color: #aa0000">
       <h3>Your trip expenses:</h3>
