@@ -4,6 +4,7 @@ var Expense = require("../models/Expense");
 
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
+var DateTime = require("node-datetime");
 
 mongoose.connect("mongodb://localhost:27017/remembeer");
 var urlencodedParser = bodyParser.urlencoded({extended: false});
@@ -48,16 +49,30 @@ module.exports = function(app) {
   });
 
   app.post('/projects/:id/newexpense', urlencodedParser, function(req, res) {
+    req.body['datetime'] = DateTime.create().format('Y-m-d H:M');
     Expense(req.body).save(function(err, data) {
       if (err) throw err;
       Project.findOne({_id : req.params.id}, function(err, data2) {
-        console.log("new expense in: ", data2.title);
         data2.expenses.push(data.id);
         data2.save();
 
         res.redirect('/projects/' + req.params.id);
       });
     });
+  });
+
+  app.get('/projects/:project_id/remove/:expense_id', function(req, res) {
+    Expense.findOne({_id : req.params.expense_id})
+      .remove(function(err, data) {
+        if (err) throw err;
+        Project.findOne({_id : req.params.project_id}, function(err, data2) {
+          var to_delete = data2.expenses.filter(e => e._id == req.params.expense_id)[0];
+          data2.expenses.splice(data2.expenses.indexOf(to_delete), 1);
+          data2.save();
+
+          res.redirect('/projects/' + req.params.project_id);
+        });
+      });
   });
 
   app.get('/projects/:id/summary', function(req, res) {

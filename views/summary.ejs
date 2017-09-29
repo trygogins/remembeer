@@ -1,5 +1,18 @@
-<ul>
-  <% for (i=0; i<result.length;i++) { %>
-    <li><%= result[i].name %>: <%= result[i].paid - result[i].spent %></li>
-  <% } %>
-</ul>
+<table class="table is-bordered is-fullwidth is-striped">
+  <thead>
+    <tr>
+      <th class="subtitle"><b>Name</b></th>
+      <th class="subtitle"><b>Total</b></th>
+      <th class="subtitle">Paid - Spent</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for (i=0; i<result.length;i++) { %>
+      <tr>
+        <td><b><%= result[i].name %></b></td>
+        <td><b><%= Number(result[i].paid - result[i].spent).toFixed(2) %></b></td>
+        <td>(<%= Number(result[i].paid).toFixed(2) %>-<%= Number(result[i].spent).toFixed(2) %>)</td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

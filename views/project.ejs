@@ -54,13 +54,16 @@
               <div class="container" name="expense-form" id="<%= project.members[i]._id %>" style="visibility: hidden">
                 <form method="POST" action="/projects/<%= project._id %>/newexpense">
                   <input type="hidden" name="owner" value="<%= project.members[i]._id %>"/>
-                  <label for="amount">Amount:</label>
-                  <input type="number" name="amount"/>
-                  <% for (j=0;j<project.members.length;j++) { %>
-                    <input type="checkbox" name="took_part" value="<%= project.members[j]._id %>">
-                    <label for="took_part"><%= project.members[j].name %></label>
-                  <% }; %>
-                  <input type="submit" value="submit"/>
+                  <div class="control">
+                    <input class="input" style="width:200px" type="number" step="0.01" name="amount" placeholder="Amount" required="required"/>
+                  </div>
+                  <div class="control">
+                    <% for (j=0;j<project.members.length;j++) { %>
+                      <input class="checkbox" type="checkbox" name="took_part" value="<%= project.members[j]._id %>">
+                      <label for="took_part"><%= project.members[j].name %></label>
+                    <% }; %>
+                  </div>
+                  <input class="button is-primary" type="submit" value="submit"/>
                 </form>
               </div>
             </a>
@@ -69,27 +72,8 @@
       </tbody>
     </table>
 
-    <div style="background-color: #aa0000">
-      <h3>Your trip expenses:</h3>
-      <ul>
-        <% for (i=0;i<project.expenses.length;i++) { %>
-          <li><%= project.expenses[i].amount; %></li>
-        <% }; %>
-      </ul>
-      <form id="new-expense-form" method="POST" action="/projects/<%= project._id %>/newexpense">
-        <input id="form-owner-id" type="hidden" name="owner"/>
-        <label for="amount">Amount:</label>
-        <input type="number" name="amount"/>
-        <% for (i=0;i<project.members.length;i++) { %>
-          <input type="checkbox" name="took_part" value="<%= project.members[i]._id %>">
-          <label for="took_part"><%= project.members[i].name %></label>
-        <% }; %>
-        <input type="submit" value="submit"/>
-      </form>
-    </div>
-
-    <div style="background-color: #aaaa00">
-      <h3>Summary:</h3>
+    <div class="container">
+      <h3 class="title">Summary:</h3>
       <div id="summary">
       </div>
       <script type="text/javascript">
@@ -101,6 +85,30 @@
           });
         });
       </script>
+    </div>
+
+    <div class="container">
+      <table class="table is-bordered is-striped">
+        <h3 class="subtitle">Your trip expenses:</h3>
+        <thead>
+          <tr>
+            <th class=""><b>Date</b></th>
+            <th class=""><b>Who paid</b></th>
+            <th class=""><b>Amount</b></th>
+            <th class=""><b>Delete</b></th>
+          </tr>
+        </thead>
+        <tbody style="background-color: #aaaa00">
+          <% for (i=0;i<project.expenses.length;i++) { %>
+            <tr>
+              <td><%= project.expenses[i].datetime; %></td>
+              <td><%= project.members.filter(a => a._id.equals(project.expenses[i].owner))[0].name; %></td>
+              <td><%= project.expenses[i].amount; %></td>
+              <td style="text-align:center;vertical-align:middle"><a href="/projects/<%= project._id %>/remove/<%= project.expenses[i]._id %>"><b>X</b></a></td>
+            </tr>
+          <% }; %>
+        </tbody>
+      </table>
     </div>
   </body>
 </html>

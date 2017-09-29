@@ -6,6 +6,7 @@ var expenseSchema = new mongoose.Schema({
     ref: 'members'
   },
   amount: Number,
+  datetime: String,
   took_part: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'members'

@@ -19,6 +19,8 @@
     "ejs": "^2.5.7",
     "express": "^4.15.4",
     "ip": "^1.1.5",
-    "mongoose": "^4.11.12"
+    "mongoose": "^4.11.12",
+    "mongoose-deep-populate": "^3.0.0",
+    "node-datetime": "^2.0.3"
   }
 }
